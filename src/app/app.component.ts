@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { RankingComponent } from './pages/ranking/ranking.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, HomeComponent, RankingComponent, RouterOutlet, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
