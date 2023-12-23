@@ -2,6 +2,11 @@ export const environment = {
     production: true,
     apiUrl: "",
     apiWebsocket: '${HOST_WEBSOCKET}/websocket',
-    requestEndpoint: '/game/save-word',
-    topicEndpoint: '/topic/repeat'
+    requestTestEndpoint: '/game/save-word',
+    topicTestEndpoint: '/topic/repeat',
+
+    //session
+    sessionJoinRequestEndpoint: '',
+    gameFoundTopicEndpoint: ''
+    //game
 }

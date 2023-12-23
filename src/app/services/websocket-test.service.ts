@@ -19,10 +19,10 @@ export class WebsocketTestService {
   }
 
   save(request: SaveToRepeatRequest) {
-    return this.socketClient.send(environment.requestEndpoint, request);
+    return this.socketClient.send(environment.requestTestEndpoint, request);
   }
 
   getRepeatResponse(): Observable<RepeatResponse> {
-    return this.socketClient.onMessage(environment.topicEndpoint);
+    return this.socketClient.onMessage(environment.topicTestEndpoint);
   }
 }

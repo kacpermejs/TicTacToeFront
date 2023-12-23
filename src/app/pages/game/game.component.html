@@ -1,14 +1,11 @@
-<p>game works!</p>
-<div class="app-main">
-    <h1>Save word to repeat</h1>
-    <div class="app-main-buttons">
-      <button [disabled]="webSocketConnected" (click)="connect()">Connect</button>
-      <button [disabled]="!webSocketConnected" (click)="disconnect()">Disconnect</button>
-    </div>
-    <app-socket-test (onRequest)="createRequest($event)"></app-socket-test>
-    <ul class="app-main-responses">
-      <li *ngFor="let response of repeatResponses; let i = index">
-        {{i + 1}}) word: {{response.content}}, counter: {{response.numberOfRepetitions}}
-      </li>
-    </ul>
+<div>
+  <button (click)="connect()">Connect</button>
+  <input type="text" [(ngModel)]="playerId">
+  <button (click)="joinLobby()">Join Lobby</button>
+
+  <div *ngIf="gameFoundMessage">
+    <p>Game session found!</p>
+    <p>Opponent ID: {{ gameFoundMessage.opponentId }}</p>
+    <p>Game Session ID: {{ gameFoundMessage.gameSessionId }}</p>
   </div>
+</div>

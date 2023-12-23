@@ -75,6 +75,26 @@ export class SocketClientService implements OnDestroy {
       }))
   }
 
+  onMessageUser(userId: string, topic: string): Observable<any> {
+    if (this.currentSubscription) {
+      return new Observable<any>();
+    }
+    const userTopic = `/user/${userId}${topic}`;
+    return this.connectionState.pipe(
+      filter((state) => state === SocketClientState.CONNECTED),
+      first(),
+      switchMap(() => {
+        return new Observable<any>((observer) => {
+          this.currentSubscription = this.client?.subscribe(userTopic, (message) => {
+            observer.next(JSON.parse(message.body));
+          });
+          return () =>
+            this.currentSubscription?.id ? this.client?.unsubscribe(this.currentSubscription?.id) : undefined;
+        });
+      })
+    );
+  }
+
   ngOnDestroy(): void {
     this.disconnect();
   }
