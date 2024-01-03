@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SocketTestComponent } from './socket-test/socket-test.component';
 import { Observable } from 'rxjs';
 import { GameService, GameFoundMessage } from '../../services/game.service';
 import { PlayerService } from '../../services/player.service';
@@ -14,7 +13,7 @@ export interface Message {
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SocketTestComponent, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
