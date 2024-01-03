@@ -1,20 +1,11 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Client, StompSubscription} from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {BehaviorSubject, filter, first, Observable, switchMap} from "rxjs";
+import {BehaviorSubject, filter, first, Observable, Subject, switchMap} from "rxjs";
 import { environment } from '../../environments/environment';
 
-export type SaveToRepeatRequest = {
-  value: string
-}
-
-export type RepeatResponse = {
-  content: string,
-  numberOfRepetitions: number
-}
-
 export enum SocketClientState {
-  ATTEMPTING, CONNECTED
+  DISCONNECTED, ATTEMPTING, CONNECTED
 }
 
 @Injectable({
@@ -28,19 +19,32 @@ export class SocketClientService implements OnDestroy {
   private currentSubscription: StompSubscription | undefined = undefined;
   private client: Client | null = null;
 
+  private onConnectSubject: Subject<void> = new Subject<void>();
+  public onConnect$: Observable<void> = this.onConnectSubject.asObservable();
+
+  private onDisconnectSubject: Subject<void> = new Subject<void>();
+  public onDisconnect$: Observable<void> = this.onConnectSubject.asObservable();
+
   constructor() {
-    this.connectionState = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
+    this.connectionState = new BehaviorSubject<SocketClientState>(SocketClientState.DISCONNECTED);
     SocketClientService.connectionState$ = this.connectionState.asObservable();
-    this.client = new Client({webSocketFactory: () => new SockJS(environment.apiWebsocket)});
+    
+  }
+
+  connect(headers: Record<string, string> = {}): void {
+    this.disconnect()
+    this.client = new Client({
+      webSocketFactory: () => new SockJS(environment.apiWebsocket),
+      connectHeaders: headers
+    });
     this.client.onConnect = () => {
       this.connectionState.next(SocketClientState.CONNECTED);
+      this.onConnectSubject.next();
     };
     this.client.onDisconnect = () => {
       this.connectionState.next(SocketClientState.ATTEMPTING);
+      this.onDisconnectSubject.next();
     }
-  }
-
-  connect(): void {
     this.client?.activate();
   }
 

@@ -1,11 +1,13 @@
 <div>
-  <button (click)="connect()">Connect</button>
   <input type="text" [(ngModel)]="playerId">
-  <button (click)="joinLobby()">Join Lobby</button>
+  <button (click)="connect()">Connect</button>
 
-  <div *ngIf="gameFoundMessage">
+  <br>
+  <button *ngIf="canJoin$ | async" (click)="joinLobby()">Join Lobby</button>
+
+  <div *ngIf="gameFoundMessage$ | async">
     <p>Game session found!</p>
-    <p>Opponent ID: {{ gameFoundMessage.opponentId }}</p>
-    <p>Game Session ID: {{ gameFoundMessage.gameSessionId }}</p>
+    <p>Opponent ID: {{ gameFoundMessage?.opponentId }}</p>
+    <p>Game Session ID: {{ gameFoundMessage?.gameSessionId }}</p>
   </div>
 </div>

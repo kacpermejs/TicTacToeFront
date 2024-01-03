@@ -1,7 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { RepeatResponse, SaveToRepeatRequest, SocketClientService } from './socket-client.service';
+import { Observable } from 'rxjs';
+import { SocketClientService } from './socket-client.service';
 import { environment } from '../../environments/environment';
+
+export type SaveToRepeatRequest = {
+  value: string
+}
+
+export type RepeatResponse = {
+  content: string,
+  numberOfRepetitions: number
+}
 
 @Injectable({
   providedIn: 'root',
