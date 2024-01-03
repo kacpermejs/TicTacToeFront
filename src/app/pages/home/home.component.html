@@ -1,1 +1,5 @@
-<button routerLink="/game" class="play-button">Play</button>
+<button *ngIf="canJoin$ | async; else elseBlock" routerLink="/game" class="play-button" (click)="joinLobby()" >Play</button>
+
+<ng-template #elseBlock>
+    <h2>Sign in to play</h2>
+</ng-template>

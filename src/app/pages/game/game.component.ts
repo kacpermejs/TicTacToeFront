@@ -20,31 +20,14 @@ export interface Message {
 })
 export class GameComponent implements OnInit {
 
-  canJoin$: Observable<boolean>;
   gameFoundMessage$: Observable<GameFoundMessage | undefined>
-  playerId: string = '';
-
-  canJoin: boolean = false;
   gameFoundMessage?: GameFoundMessage;
 
   constructor(private gameService: GameService, private playerService: PlayerService) {
-    this.canJoin$ = this.gameService.canJoin$;
     this.gameFoundMessage$ = gameService.gameFoundMessage$;
-    this.canJoin$.subscribe(c => this.canJoin = c);
     this.gameFoundMessage$.subscribe(m => this.gameFoundMessage = m);
   }
 
   ngOnInit(): void {}
-
-  connect(): void {
-    this.playerService.setPlayerId(this.playerId);
-    console.log("setting playerId to: ");
-    console.log(this.playerId);
-  }
-
-  joinLobby(): void {
-    if (this.canJoin)
-      this.gameService.joinLobby(this.playerId);
-  }
 
 }
