@@ -1,0 +1,26 @@
+<div *ngIf="isGameOver || winner" class="message">
+    <div *ngIf="winner" class="winner">
+        <h2>{{ winner }} wins!</h2>
+    </div>
+    
+    <div *ngIf="isGameOver && !winner" class="draw">
+        <h2>It's a draw!</h2>
+    </div>
+</div>
+<div class="tic-tac-toe">
+    <div *ngFor="let row of board; let i = index" class="row">
+        <div
+            *ngFor="let cell of row; let j = index"
+            class="cell"
+            (click)="makeMove(i, j)"
+            [ngClass]="{ 'cell-x': cell === 'X', 'cell-o': cell === 'O' }"
+        >
+        {{ cell }}
+        </div>
+    </div>
+</div>
+<div class="actions">
+    
+    
+    <button (click)="resetGame()">Restart Game</button>
+</div>

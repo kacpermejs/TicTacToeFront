@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GameService, GameFoundMessage } from '../../services/game.service';
 import { PlayerService } from '../../services/player.service';
+import { GameplayComponent } from './views/gameplay/gameplay.component';
 
 export interface Message {
   content: string;
@@ -13,7 +14,7 @@ export interface Message {
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, GameplayComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })

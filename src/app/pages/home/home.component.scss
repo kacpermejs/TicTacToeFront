@@ -1,0 +1,37 @@
+@import '../../../styles/colors';
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0; // Reset min-height to allow flex-grow to work
+    flex-grow: 1; // Make the component grow to take up remaining space
+    margin-top: 300px;
+}
+
+.play-button {
+    height: 100px; // Increase the height
+    padding: 30px; // Increase the padding
+    font-size: 36px; // Increase the font size
+    border-radius: 15px;
+  
+    box-shadow: $primary-darker-color 0 -4px 0 6px inset, $button-shadow-color 0 8px 16px, $button-shadow-color 0 20px 40px -12px, $primary-darker-color 0 -12px 0 inset;
+    // Adjust the box-shadow values for larger size
+  
+    &:focus {
+      box-shadow: $primary-darker-color 0 -4px 0 6px inset, $button-shadow-color 0 8px 16px, $button-shadow-color 0 20px 40px -12px, $primary-darker-color 0 -12px 0 inset;
+      filter: brightness(110%);
+    }
+  
+    &:hover {
+      box-shadow: $primary-darker-color 0 -4px 0 6px inset, $button-shadow-color 0 12px 24px, $button-shadow-color 0 20px 40px -12px, $primary-darker-color 0 -12px 0 inset;
+      transform: translateY(-8px); // Adjust the transformation for larger size on hover
+    }
+  
+    &:active {
+      box-shadow: $primary-darker-color 0 -4px 0 6px inset, $primary-darker-color 0 6px 14px inset;
+      transform: translateY(8px); // Adjust the transformation for larger size on active
+    }
+    /* Any additional styles for the larger button */
+  }
