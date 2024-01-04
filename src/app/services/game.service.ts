@@ -8,6 +8,13 @@ export interface GameFoundMessage {
   gameSessionId: string;
 }
 
+export enum GameStatus {
+  Connecting = 'connecting',
+  Waiting = 'waiting',
+  Playing = 'playing',
+  GameOver = 'gameOver'
+}
+
 @Injectable({
   providedIn: 'root'
 })

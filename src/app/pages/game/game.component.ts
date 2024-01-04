@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { GameService, GameFoundMessage } from '../../services/game.service';
+import { GameService, GameFoundMessage, GameStatus } from '../../services/game.service';
 import { PlayerService } from '../../services/player.service';
 import { GameplayComponent } from './views/gameplay/gameplay.component';
+import { JoiningComponent } from './views/joining/joining.component';
+import { EndgameComponent } from './views/endgame/endgame.component';
 
 export interface Message {
   content: string;
@@ -14,20 +16,31 @@ export interface Message {
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, GameplayComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, GameplayComponent, JoiningComponent, EndgameComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   gameFoundMessage$: Observable<GameFoundMessage | undefined>
   gameFoundMessage?: GameFoundMessage;
 
-  constructor(private gameService: GameService, private playerService: PlayerService) {
+  gameStatus: GameStatus = GameStatus.Connecting;
+
+  constructor(private gameService: GameService) {
+    console.log("game ctor!")
     this.gameFoundMessage$ = gameService.gameFoundMessage$;
-    this.gameFoundMessage$.subscribe(m => this.gameFoundMessage = m);
+    this.gameFoundMessage$.subscribe(m => {
+      this.gameFoundMessage = m;
+    });
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    console.log("game destroyed");
+    this.gameService.disconnect();
+  }
+
 
 }

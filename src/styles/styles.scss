@@ -3,6 +3,7 @@
 body {
     background-color: $background-color;
     margin: 0px;
+    font-family: "JetBrains Mono", monospace;
 }
 
 button {
@@ -52,6 +53,8 @@ button {
 }
 
 nav {
+    position: relative;
+    z-index: 100;
     display: flex;
     background-color: $secondary-color;
     padding: 10px;

@@ -1,1 +1,4 @@
-<p>joining works!</p>
+<div class="joining-status-container" [ngClass]="{ 'playing': status === 'playing' }">
+  <div class="joining-status-background"></div>
+  <div class="joining-status-text" [ngClass]="status">{{ getStatusMessage(status) }}</div>
+</div>
