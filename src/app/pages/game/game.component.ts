@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { GameService, GameFoundMessage, GameStatus } from '../../services/game.service';
 import { PlayerService } from '../../services/player.service';
 import { GameplayComponent } from './views/gameplay/gameplay.component';
@@ -25,21 +25,25 @@ export class GameComponent implements OnInit, OnDestroy {
   gameFoundMessage$: Observable<GameFoundMessage | undefined>
   gameFoundMessage?: GameFoundMessage;
 
-  gameStatus: GameStatus = GameStatus.Connecting;
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private gameService: GameService) {
     console.log("game ctor!")
     this.gameFoundMessage$ = gameService.gameFoundMessage$;
-    this.gameFoundMessage$.subscribe(m => {
-      this.gameFoundMessage = m;
-    });
+    this.gameFoundMessage$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(m => {
+        this.gameFoundMessage = m;
+      });
   }
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
     console.log("game destroyed");
-    this.gameService.disconnect();
+    this.destroy$.next();
+    this.destroy$.complete();
+    // this.gameService.disconnect();
   }
 
 

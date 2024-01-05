@@ -5,15 +5,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PlayerService {
-  private playerIdSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  private playerIdSubject: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(null);
 
-  playerId$: Observable<string | null> = this.playerIdSubject.asObservable();
+  playerId$: Observable<number | null> = this.playerIdSubject.asObservable();
 
-  setPlayerId(playerId: string): void {
+  setPlayerId(playerId: number): void {
     this.playerIdSubject.next(playerId);
   }
 
-  getPlayerId(): string | null {
+  getPlayerId(): number | null {
     return this.playerIdSubject.value;
   }
 }

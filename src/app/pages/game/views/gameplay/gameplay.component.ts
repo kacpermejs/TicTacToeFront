@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GameService } from '../../../../services/game.service';
 
 enum Player {
   X = 'X',
   O = 'O',
+}
+
+interface Move {
+  row: number;
+  column: number;
 }
 
 @Component({
@@ -14,12 +20,56 @@ enum Player {
   styleUrl: './gameplay.component.scss'
 })
 export class GameplayComponent {
-  currentPlayer: Player = Player.X;
+  currentPlayer: Player = Player.O;
   board: Player[][] = Array(3).fill(null).map(() => Array(3).fill(null));
   winner: Player | null = null;
   isGameOver = false;
+  lastMove?: Move;
+
+  constructor(private gameService: GameService) {
+    this.gameService.gameStateMessage$.subscribe(m => {
+      console.log("trying to update game state")
+
+      if(m) {
+        console.log("gameStateMessage");
+        console.log(m);
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            this.board[i][j] = m.board[i][j];
+          }
+        }
+        this.currentPlayer = m.currentPlayer;
+        this.isGameOver = m.gameWon;
+        switch (m.winner) {
+          case ' ':
+            this.winner = null;
+            break;
+          case 'O':
+            this.winner = Player.O;
+            break;
+          case 'X':
+            this.winner = Player.X;
+            break;
+          
+          default:
+            break;
+        }
+      }
+
+      
+    });
+
+  }
 
   makeMove(row: number, col: number): void {
+    this.gameService.makeMove(row, col);
+    this.lastMove = {
+      row: row,
+      column: col
+    };
+  }
+
+  showMoveOffline(row: number, col: number): void {
     if (!this.board[row][col] && !this.isGameOver) {
       this.board[row][col] = this.currentPlayer;
       if (this.checkForWinner(row, col)) {
@@ -74,7 +124,7 @@ export class GameplayComponent {
   }
 
   resetGame(): void {
-    this.currentPlayer = Player.X;
+    this.currentPlayer = Player.O;
     this.board = Array(3).fill(null).map(() => Array(3).fill(null));
     this.winner = null;
     this.isGameOver = false;

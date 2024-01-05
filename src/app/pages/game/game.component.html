@@ -3,7 +3,7 @@
   <div *ngIf="gameFoundMessage$ | async">
     <p>Game session found!</p>
     <p>Opponent ID: {{ gameFoundMessage?.opponentId }}</p>
-    <p>Game Session ID: {{ gameFoundMessage?.gameSessionId }}</p>
+    <p>Game Session ID: {{ gameFoundMessage?.gameSession.id }}</p>
   </div>
 </div>
 

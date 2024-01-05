@@ -4,8 +4,9 @@ import { BehaviorSubject, Observable, Subject, map, switchMap, takeUntil } from 
 import { PlayerService } from './player.service';
 
 export interface GameFoundMessage {
-  opponentId: string;
-  gameSessionId: string;
+  opponentId: number;
+  gameSession: any;
+
 }
 
 export enum GameStatus {
@@ -13,6 +14,19 @@ export enum GameStatus {
   Waiting = 'waiting',
   Playing = 'playing',
   GameOver = 'gameOver'
+}
+
+export interface MoveCommand {
+  row: number;
+  column: number;
+  playerId: number;
+  sessionId: number;
+}
+
+export interface MoveCommandPayload {
+  move: MoveCommand;
+  userId: number;
+  token: string;
 }
 
 @Injectable({
@@ -31,6 +45,10 @@ export class GameService {
     new BehaviorSubject<GameFoundMessage | undefined>(undefined);
   gameFoundMessage$: Observable<GameFoundMessage | undefined> = this.gameFoundSubject.asObservable();
 
+  private gameStateSubject: BehaviorSubject<any | undefined> = 
+    new BehaviorSubject<any | undefined>(undefined);
+  gameStateMessage$: Observable<any | undefined> = this.gameStateSubject.asObservable();
+
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -46,29 +64,49 @@ export class GameService {
       .subscribe();
   }
 
-  connect(playerId: string | null): Observable<void> {
+  connect(playerId: number | null): Observable<void> {
     return new Observable<void>((observer) => {
       if(playerId) {
         console.log('connecting');
 
-        this.socketClientService.connect({userId: playerId});
+        this.socketClientService.connect({userId: playerId.toString()});
 
-        this.socketClientService.onMessageUser(playerId, '/queue/join-confirmation')
+        this.socketClientService.onMessageUser(playerId.toString(), '/queue/join-confirmation')
           .pipe(takeUntil(this.destroy$))
-          .subscribe(message => this.joinQueueSubject.next(message));
+          .subscribe(message => {
+            this.joinQueueSubject.next(message);
+            console.log(message);
+          });
 
-        this.socketClientService.onMessageUser(playerId, '/queue/game-found').pipe(
+        this.socketClientService.onMessageUser(playerId.toString(), '/queue/game-found').pipe(
           map((anyValue: any) => {
-            const gameFoundMessage: GameFoundMessage = {
-              opponentId: anyValue.opponentId,
-              gameSessionId: anyValue.gameSessionId
-            };
-            return gameFoundMessage;
+            // const gameFoundMessage: GameFoundMessage = {
+            //   opponentId: anyValue.opponentId,
+            //   gameSessionId: anyValue.gameSessionId
+            // };
+            return anyValue;
           }),
           takeUntil(this.destroy$)
         )
-        .subscribe(message => this.gameFoundSubject.next(message));
+        .subscribe(message => {
+          this.gameFoundSubject.next(message);
+          console.log(message);
+        });
 
+        //moves
+        this.socketClientService.onMessageUser(playerId.toString(), '/playing/update').pipe(
+          map((anyValue: any) => {
+            return anyValue;
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(message => {
+          this.gameStateSubject.next(message);
+          console.log("Game state update");
+          console.log(message);
+        });
+
+        //health check
         SocketClientService.connectionState$.subscribe((state) => {
           this.canJoinSubject.next(state === SocketClientState.CONNECTED);
         });
@@ -88,7 +126,7 @@ export class GameService {
     });
   }
 
-  joinLobby(playerId: string): void {
+  joinLobby(playerId: number): void {
     this.canJoin$
       .pipe(takeUntil(this.destroy$))
       .subscribe(canJoin => {
@@ -100,6 +138,28 @@ export class GameService {
           // Handle logic when the player cannot join
         }
       });
+  }
+
+  makeMove(row: number, column: number) {
+    if(this.gameFoundSubject.value) {
+      const playerId = this.playerService.getPlayerId();
+      const sessionId = this.gameFoundSubject.value.gameSession.id;
+
+      if (playerId != null) {
+
+        const payload: MoveCommand = {
+          row: row,
+          column: column,
+          playerId: playerId,
+          sessionId: sessionId
+        };
+
+        console.log("move made: ");
+        console.log(payload);
+
+        this.socketClientService.send('/game/move', payload);
+      }
+    }
   }
 
   disconnect(): void {

@@ -16,7 +16,7 @@ export class LoginComponent {
   constructor(private playerService: PlayerService) {}
 
   login(): void {
-    this.playerService.setPlayerId(this.playerId);
+    this.playerService.setPlayerId(parseInt(this.playerId));
     console.log("setting playerId to: ");
     console.log(this.playerId);
   }
