@@ -1,0 +1,48 @@
+<div class="container">
+  <div *ngIf="!isConfirmed" class="card">
+    <div class="card-header">
+      <h1>Register</h1>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        Email:
+        <input
+          type="text"
+          name="email"
+          [(ngModel)]="user.email">
+      </div>
+      <div class="row">
+        Password:
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="user.password">
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <button (click)="signUp()" class="btn-accent"><p class="text">Register</p></button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isConfirmed" class="card">
+    <div class="card-header">
+      <h1>Confirm Email</h1>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        Code:
+        <input
+          type="text"
+          name="code"
+          [(ngModel)]="user.code">
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <button (click)="confirmSignUp()" class="btn-accent"><p class="text">Confirm</p></button>
+      </div>
+    </div>
+  </div>
+</div>

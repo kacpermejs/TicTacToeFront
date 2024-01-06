@@ -1,6 +1,14 @@
 <nav>
+  <!-- to the left -->
   <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
   <a routerLink="/ranking" routerLinkActive="active" ariaCurrentWhenActive="page">Ranking</a>
-  <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="login">Login</a>
+  
+  <!-- to the right -->
+  <div class="login">
+    <a *ngIf="!isAuthenticated()" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" >Login</a>
+    <a *ngIf="!isAuthenticated()" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a>
+    <button *ngIf="isAuthenticated()" (click)="signOut()" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Logout</button>
+  </div>
+  
 </nav>
 <router-outlet></router-outlet>

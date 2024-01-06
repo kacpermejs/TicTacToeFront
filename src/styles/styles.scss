@@ -52,6 +52,79 @@ button {
     }
 }
 
+.btn-accent {
+    background-color: $accent-color;
+
+    box-shadow: $button-shadow-color 0 2px 4px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
+    // Adjust the box-shadow values for larger size
+
+    &:focus {
+        box-shadow: $button-shadow-color 0 2px 4px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
+    }
+
+    &:hover {
+        box-shadow: $button-shadow-color 0 4px 8px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
+    }
+    
+    &:active {
+        box-shadow: $accent-darker-color 0 3px 7px inset;
+    }
+}
+
+// Container styles
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// Card styles
+.card {
+    width: 300px;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    button {
+        color: rgb(38, 38, 38)
+    }
+
+    .btn-accent {
+        color: white;
+    }
+}
+
+// Card header styles
+.card-header {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-footer {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+// Card body styles
+.card-body {
+    padding: 20px;
+}
+
+// Row styles
+.row {
+    margin-bottom: 15px;
+}
+
+// Input styles
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
 nav {
     position: relative;
     z-index: 100;
@@ -61,54 +134,58 @@ nav {
     gap: 10px;
     margin-bottom: 50px;
     box-shadow: 0px 0px 4px 5px $secondary-color;
-}
 
-nav a {
-    align-items: center;
-    appearance: none;
-    background-color: $accent-color;
-    border-radius: 4px;
-    border-width: 0;
-    box-shadow: $button-shadow-color 0 2px 4px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
-    box-sizing: border-box;
-    color: $secondary-color;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: "JetBrains Mono", monospace;
-    height: 48px;
-    justify-content: center;
-    line-height: 1;
-    list-style: none;
-    overflow: hidden;
-    padding-left: 16px;
-    padding-right: 16px;
-    position: relative;
-    text-align: left;
-    text-decoration: none;
-    transition: box-shadow .15s,transform .15s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    will-change: box-shadow,transform;
-    font-size: 18px;
-    
-    &:focus {
+    button {
+        color: $secondary-color;
+    }
+
+    a {
+        align-items: center;
+        appearance: none;
+        background-color: $accent-color;
+        border-radius: 4px;
+        border-width: 0;
         box-shadow: $button-shadow-color 0 2px 4px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
-        filter: brightness(110%);
-    }
-    
-    &:hover {
-        box-shadow: $button-shadow-color 0 4px 8px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
-        transform: translateY(-2px);
-    }
-    
-    &:active {
-        box-shadow: $accent-darker-color 0 3px 7px inset;
-        transform: translateY(2px);
-    }
+        box-sizing: border-box;
+        color: $secondary-color;
+        cursor: pointer;
+        display: inline-flex;
+        font-family: "JetBrains Mono", monospace;
+        height: 48px;
+        justify-content: center;
+        line-height: 1;
+        list-style: none;
+        overflow: hidden;
+        padding-left: 16px;
+        padding-right: 16px;
+        position: relative;
+        text-align: left;
+        text-decoration: none;
+        transition: box-shadow .15s,transform .15s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        white-space: nowrap;
+        will-change: box-shadow,transform;
+        font-size: 18px;
+        
+        &:focus {
+            box-shadow: $button-shadow-color 0 2px 4px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
+            filter: brightness(110%);
+        }
+        
+        &:hover {
+            box-shadow: $button-shadow-color 0 4px 8px, $button-shadow-color 0 7px 13px -3px, $accent-darker-color 0 -3px 0 inset;
+            transform: translateY(-2px);
+        }
+        
+        &:active {
+            box-shadow: $accent-darker-color 0 3px 7px inset;
+            transform: translateY(2px);
+        }
 
-    &.active {
-        transform: translateY(-3px);
+        &.active {
+            transform: translateY(-3px);
+        }
     }
 }

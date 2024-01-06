@@ -7,6 +7,11 @@ export const environment = {
 
     //session
     sessionJoinRequestEndpoint: '',
-    gameFoundTopicEndpoint: ''
+    gameFoundTopicEndpoint: '',
     //game
+
+    cognito: {
+        userPoolId: 'us-east-1_R73Wa0n55',
+        userPoolWebClientId: '4bid09hhgh4pumicibq3mll6kc'
+    }
 }

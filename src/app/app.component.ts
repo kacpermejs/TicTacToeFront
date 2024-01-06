@@ -1,17 +1,30 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { RankingComponent } from './pages/ranking/ranking.component';
-import { HomeComponent } from './pages/home/home.component';
-import { GameComponent } from './pages/game/game.component';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { CognitoService } from './services/cognito.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HomeComponent, GameComponent, RankingComponent, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'TicTacToeFront';
+
+  constructor(private router: Router, private cognitoService: CognitoService) {
+
+  }
+
+  public signOut(): void {
+    this.cognitoService.signOut().then(() => {
+      console.log("User signed out!");
+      this.router.navigate(['/home']);
+    });
+  }
+
+  public isAuthenticated(): boolean {
+    return this.cognitoService.isAuthenticated();
+  }
 }

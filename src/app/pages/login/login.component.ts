@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../../services/player.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CognitoService, IUser } from '../../services/cognito.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +15,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class LoginComponent {
   playerId: string = '';
 
-  constructor(private playerService: PlayerService) {}
+  user: IUser = {} as IUser;
+
+  constructor(private router: Router, private playerService: PlayerService, private cognitoService: CognitoService) {}
 
   login(): void {
     this.playerService.setPlayerId(parseInt(this.playerId));
     console.log("setting playerId to: ");
     console.log(this.playerId);
+  }
+
+  signIn(): void {
+
+    this.cognitoService.signIn(this.user).then(() => {
+      this.router.navigate(['/home']);
+    }).catch(() => {
+      console.log("Something went wrong with signin!");
+    });
   }
 }
