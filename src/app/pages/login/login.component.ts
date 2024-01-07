@@ -20,7 +20,7 @@ export class LoginComponent {
   constructor(private router: Router, private playerService: PlayerService, private cognitoService: CognitoService) {}
 
   login(): void {
-    this.playerService.setPlayerId(parseInt(this.playerId));
+    this.playerService.setPlayerId(this.playerId);
     console.log("setting playerId to: ");
     console.log(this.playerId);
   }

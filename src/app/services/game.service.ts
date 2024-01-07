@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { SocketClientService, SocketClientState } from './socket-client.service';
 import { BehaviorSubject, Observable, Subject, map, switchMap, takeUntil } from 'rxjs';
 import { PlayerService } from './player.service';
+import { CognitoService } from './cognito.service';
 
 export interface GameFoundMessage {
-  opponentId: number;
+  opponentId: string;
   gameSession: any;
 
 }
@@ -19,13 +20,13 @@ export enum GameStatus {
 export interface MoveCommand {
   row: number;
   column: number;
-  playerId: number;
+  playerId: string;
   sessionId: number;
 }
 
 export interface MoveCommandPayload {
   move: MoveCommand;
-  userId: number;
+  userId: string;
   token: string;
 }
 
@@ -53,7 +54,8 @@ export class GameService {
 
   constructor(
     private socketClientService: SocketClientService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private cognitoService: CognitoService
   ) {
     // Subscribe to playerId changes and establish a connection
     this.playerService.playerId$
@@ -64,21 +66,27 @@ export class GameService {
       .subscribe();
   }
 
-  connect(playerId: number | null): Observable<void> {
+  connect(playerId: string | null): Observable<void> {
     return new Observable<void>((observer) => {
       if(playerId) {
         console.log('connecting');
+        this.cognitoService.getToken().then(token => {
+          var headers = {
+            'Authorization': 'Bearer ' + token,
+            'userId': playerId
+          };
+          console.log(headers);
+          this.socketClientService.connect(headers);
+        });
 
-        this.socketClientService.connect({userId: playerId.toString()});
-
-        this.socketClientService.onMessageUser(playerId.toString(), '/queue/join-confirmation')
+        this.socketClientService.onMessageUser(playerId, '/queue/join-confirmation')
           .pipe(takeUntil(this.destroy$))
           .subscribe(message => {
             this.joinQueueSubject.next(message);
             console.log(message);
           });
 
-        this.socketClientService.onMessageUser(playerId.toString(), '/queue/game-found').pipe(
+        this.socketClientService.onMessageUser(playerId, '/queue/game-found').pipe(
           map((anyValue: any) => {
             // const gameFoundMessage: GameFoundMessage = {
             //   opponentId: anyValue.opponentId,
@@ -94,7 +102,7 @@ export class GameService {
         });
 
         //moves
-        this.socketClientService.onMessageUser(playerId.toString(), '/playing/update').pipe(
+        this.socketClientService.onMessageUser(playerId, '/playing/update').pipe(
           map((anyValue: any) => {
             return anyValue;
           }),
@@ -126,13 +134,13 @@ export class GameService {
     });
   }
 
-  joinLobby(playerId: number): void {
+  joinLobby(playerId: string): void {
     this.canJoin$
       .pipe(takeUntil(this.destroy$))
       .subscribe(canJoin => {
         if (canJoin) {
           console.log('Trying to join with ' + playerId + ' playerId!');
-          this.socketClientService.send('/game/lobby/join', playerId);
+          this.socketClientService.send('/game/lobby/join', {userId: playerId});
         } else {
           console.log('Cannot join at the moment.');
           // Handle logic when the player cannot join

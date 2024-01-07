@@ -53,9 +53,32 @@ export class CognitoService {
     return this.authSubject.value;
   }
 
+  async getCognitoUserId(): Promise<string | null> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const cognitoUserId = user.attributes.sub; // 'sub' is the Cognito User ID
+      return cognitoUserId;
+    } catch (error) {
+      console.error('Error getting Cognito User ID:', error);
+      return null;
+    }
+  }
+
+  async getToken(): Promise<string | null> {
+    try {
+      const session = await Auth.currentSession();
+      const idToken = session.getIdToken().getJwtToken();
+      return idToken;
+    } catch (error) {
+      console.error('Error getting token:', error);
+      return null;
+    }
+  }
+  
   private checkAuthStatus(): void {
     Auth.currentAuthenticatedUser()
       .then(() => this.authSubject.next(true))
       .catch(() => this.authSubject.next(false));
   }
+
 }
