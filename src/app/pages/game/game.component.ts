@@ -43,7 +43,7 @@ export class GameComponent implements OnInit, OnDestroy {
     console.log("game destroyed");
     this.destroy$.next();
     this.destroy$.complete();
-    // this.gameService.disconnect();
+    this.gameService.quit();
   }
 
 

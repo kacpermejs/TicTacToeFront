@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Amplify, Auth } from 'aws-amplify';
 import { environment } from '../../environments/environment';
+import { HttpHeaders } from '@angular/common/http';
+import { StompHeaders } from '@stomp/stompjs';
 
 export interface IUser {
   email: string;
@@ -53,7 +55,7 @@ export class CognitoService {
     return this.authSubject.value;
   }
 
-  async getCognitoUserId(): Promise<string | null> {
+  public async getCognitoUserId(): Promise<string | null> {
     try {
       const user = await Auth.currentAuthenticatedUser();
       const cognitoUserId = user.attributes.sub; // 'sub' is the Cognito User ID
@@ -64,14 +66,53 @@ export class CognitoService {
     }
   }
 
-  async getToken(): Promise<string | null> {
+  public async getToken(): Promise<string> {
     try {
-      const session = await Auth.currentSession();
-      const idToken = session.getIdToken().getJwtToken();
-      return idToken;
+      // Get the current authenticated user
+      const user = await Auth.currentAuthenticatedUser();
+
+      // Get the session for the user
+      const session = user.signInUserSession;
+
+      // Access token is available in the session
+      return session.getAccessToken().getJwtToken();
     } catch (error) {
-      console.error('Error getting token:', error);
-      return null;
+      console.error('Error getting access token', error);
+      throw error;
+    }
+  }
+
+  public async getHttpHeaders(): Promise<HttpHeaders> {
+    try {
+      // Get the access token
+      const accessToken = await this.getToken();
+
+      // Include the access token in the Authorization header
+      return new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      });
+    } catch (error) {
+      console.error('Error getting headers', error);
+      throw error;
+    }
+  }
+
+  async getStompHeaders(): Promise<StompHeaders> {
+    try {
+      // Get the access token
+      const accessToken = await this.getToken();
+  
+      // Create StompHeaders with authentication
+      const stompHeaders: StompHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      };
+  
+      return stompHeaders;
+    } catch (error) {
+      console.error('Error creating StompHeaders', error);
+      throw error;
     }
   }
   

@@ -19,6 +19,7 @@ export class RankingComponent implements OnInit {
   ngOnInit(): void {
     console.log("Test:");
     this.testService.testEndpoint();
+    this.testService.testEndpointPrivate();
   }
 
 }

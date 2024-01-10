@@ -70,12 +70,7 @@ export class GameService {
     return new Observable<void>((observer) => {
       if(playerId) {
         console.log('connecting');
-        this.cognitoService.getToken().then(token => {
-          var headers = {
-            'Authorization': 'Bearer ' + token,
-            'userId': playerId
-          };
-          console.log(headers);
+        this.cognitoService.getStompHeaders().then(headers => {
           this.socketClientService.connect(headers);
         });
 
@@ -168,6 +163,10 @@ export class GameService {
         this.socketClientService.send('/game/move', payload);
       }
     }
+  }
+
+  quit() {
+    //TODO
   }
 
   disconnect(): void {
