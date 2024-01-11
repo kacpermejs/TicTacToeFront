@@ -32,7 +32,6 @@ export class SocketClientService implements OnDestroy {
   }
 
   connect(headers: Record<string, string> = {}): void {
-    this.disconnect()
     this.client = new Client({
       webSocketFactory: () => new SockJS(environment.apiWebsocket),
       connectHeaders: headers
