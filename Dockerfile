@@ -1,7 +1,5 @@
 FROM node:20.10.0-alpine AS build
 
-ARG NODE_ENV=production
-
 WORKDIR /app
 
 COPY package*.json ./
@@ -11,7 +9,7 @@ RUN npx ngcc -properties es2023 browser module main --first-only --create-ivy-en
 
 COPY . .
 
-RUN if [ "$NODE_ENV" = "production" ] ; then npm run build; else npm run build-dev; fi
+RUN npm run build
 
 FROM nginx:stable
 COPY --from=build /app/dist/tic-tac-toe-front/browser /usr/share/nginx/html

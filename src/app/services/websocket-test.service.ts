@@ -28,10 +28,10 @@ export class WebsocketTestService {
   }
 
   save(request: SaveToRepeatRequest) {
-    return this.socketClient.send(environment.requestTestEndpoint, request);
+    return this.socketClient.send('/game/save-word', request);
   }
 
   getRepeatResponse(): Observable<RepeatResponse> {
-    return this.socketClient.onMessage(environment.topicTestEndpoint);
+    return this.socketClient.onMessage('/topic/repeat');
   }
 }

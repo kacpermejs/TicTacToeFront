@@ -28,7 +28,7 @@ export class LoginComponent {
   signIn(): void {
 
     this.cognitoService.signIn(this.user).then(() => {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/edit-account-details']); //TODO: only if user details not provided
     }).catch(() => {
       console.log("Something went wrong with signin!");
     });

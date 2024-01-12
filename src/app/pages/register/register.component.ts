@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CognitoService, IUser } from '../../services/cognito.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class RegisterComponent {
   isConfirmed: boolean = false;
   user: IUser;
-  constructor(private router: Router, private cognitoService: CognitoService) {
+  constructor(private router: Router, private cognitoService: CognitoService, private http: HttpClient) {
     this.user = {} as IUser
   }
 
