@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://backend-prod:8080', //process.env['API_HOST'],
-    apiWebsocket: 'http://backend-prod:8080/websocket', //process.env['HOST_WEBSOCKET'] + '/websocket',
+    apiUrl: 'http://54.237.107.114:8080', //process.env['API_HOST'],
+    apiWebsocket: 'http://54.237.107.114:8080/websocket', //process.env['HOST_WEBSOCKET'] + '/websocket',
 
     cognito: {
         userPoolId: 'us-east-1_R73Wa0n55',
