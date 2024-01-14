@@ -2,5 +2,7 @@
 <ol>
     <li *ngFor="let player of ranking$ | async">
         <span>Name: {{ player.name }}</span>
+        <span> | Score: {{player.ranking?.score}}</span>
+        <span> | Win rate: {{winRate(player.ranking?.matchesWon!, player.ranking?.matchesLost!)}}</span>
     </li>
 </ol>

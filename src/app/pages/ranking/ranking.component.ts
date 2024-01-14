@@ -34,4 +34,11 @@ export class RankingComponent implements OnInit {
     return this.http.get<UserRanking[]>(this.rankingEndpoint);
   }
 
+  winRate(won: number, lost: number): number {
+    if (won == 0) {
+      return 0;
+    }
+    return won / lost;
+  }
+
 }
