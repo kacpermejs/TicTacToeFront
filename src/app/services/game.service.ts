@@ -4,11 +4,30 @@ import { BehaviorSubject, Observable, Subject, map, switchMap, takeUntil } from 
 import { PlayerService } from './player.service';
 import { CognitoService } from './cognito.service';
 
+export enum GameResult {
+  Unfinished,
+  PlayerOneWon,
+  PlayerTwoWon,
+  Draw
+}
+
+export interface GameSession {
+  id: number;
+  player1: any;
+  player2: any;
+
+  playerOneShape: string;
+  playerTwoShape: string;
+
+  gameResult: GameResult;
+}
+
 export interface GameFoundMessage {
   opponentId: string;
-  gameSession: any;
-
+  gameSession: GameSession;
 }
+
+
 
 export enum GameStatus {
   Connecting = 'connecting',
@@ -99,6 +118,8 @@ export class GameService {
         //moves
         this.socketClientService.onMessageUser(playerId, '/playing/update').pipe(
           map((anyValue: any) => {
+            console.log("gameEnded:")
+            console.log(anyValue.gameEnded)
             return anyValue;
           }),
           takeUntil(this.destroy$)

@@ -1,10 +1,6 @@
-<div>
-
-  <div *ngIf="gameFoundMessage$ | async">
-    <p>Game session found!</p>
-    <p>Opponent ID: {{ gameFoundMessage?.opponentId }}</p>
-    <p>Game Session ID: {{ gameFoundMessage?.gameSession.id }}</p>
-  </div>
+<div class="gameplay-start-info" *ngIf="gameFoundMessage$ | async">
+  <h2>You play against {{ gameFoundMessage?.opponentId }}</h2>
+  <h2>You play as: {{ myShape() }}</h2>
 </div>
 
 <app-joining></app-joining>

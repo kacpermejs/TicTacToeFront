@@ -8,10 +8,6 @@ import { GameplayComponent } from './views/gameplay/gameplay.component';
 import { JoiningComponent } from './views/joining/joining.component';
 import { EndgameComponent } from './views/endgame/endgame.component';
 
-export interface Message {
-  content: string;
-  randomNumber: number;
-}
 
 @Component({
   selector: 'app-game',
@@ -21,24 +17,24 @@ export interface Message {
   styleUrl: './game.component.scss'
 })
 export class GameComponent implements OnInit, OnDestroy {
-
+  
   gameFoundMessage$: Observable<GameFoundMessage | undefined>
   gameFoundMessage?: GameFoundMessage;
-
+  
   private destroy$: Subject<void> = new Subject<void>();
-
-  constructor(private gameService: GameService) {
+  
+  constructor(private gameService: GameService, private playerService: PlayerService) {
     console.log("game ctor!")
     this.gameFoundMessage$ = gameService.gameFoundMessage$;
     this.gameFoundMessage$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(m => {
-        this.gameFoundMessage = m;
-      });
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(m => {
+      this.gameFoundMessage = m;
+    });
   }
-
+  
   ngOnInit(): void {}
-
+  
   ngOnDestroy(): void {
     console.log("game destroyed");
     this.destroy$.next();
@@ -46,5 +42,17 @@ export class GameComponent implements OnInit, OnDestroy {
     this.gameService.quit();
   }
 
+  myShape(): string {
+    if (this.gameFoundMessage) {
+      const opponentId = this.gameFoundMessage.opponentId;
+      if (opponentId == this.gameFoundMessage.gameSession.player1.id) {
+        return this.gameFoundMessage.gameSession.playerTwoShape;
+      } else {
+        return this.gameFoundMessage.gameSession.playerOneShape;
+      }
+    }
+
+    return '';
+  }
 
 }

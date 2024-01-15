@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.ranking-table {
+    width: calc(100% - 60px); /* Adjusted width to include the 30px margin on each side */
+    margin: 20px auto; /* Center the table and add margin at the top */
+    overflow: hidden;
+    //box-shadow: 0px 0px 0px 3px #dddddd;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+
+    background-color: #ddd;
+}
+
+.ranking-table th, .ranking-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.ranking-table th {
+    background-color: #a1a1a1;
+}
+
+/* Optional: Add some styles to make it visually appealing */
+.ranking-table td {
+    background-color: #f2f2f2;
+    font-weight: normal;
+}

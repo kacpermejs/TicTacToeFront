@@ -39,7 +39,7 @@ export class GameplayComponent {
           }
         }
         this.currentPlayer = m.currentPlayer;
-        this.isGameOver = m.gameWon;
+        this.isGameOver = m.gameWon || m.gameEnded;
         switch (m.winner) {
           case ' ':
             this.winner = null;

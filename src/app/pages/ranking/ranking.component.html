@@ -1,8 +1,17 @@
-<p>ranking works!</p>
-<ol>
-    <li *ngFor="let player of ranking$ | async">
-        <span>Name: {{ player.name }}</span>
-        <span> | Score: {{player.ranking?.score}}</span>
-        <span> | Win rate: {{winRate(player.ranking?.matchesWon!, player.ranking?.matchesLost!)}}</span>
-    </li>
-</ol>
+<h1>Ranking:</h1>
+<table class="ranking-table" id="ranking-table">
+    <thead>
+        <tr>
+            <th>Nickname</th>
+            <th>Score</th>
+            <th>Win Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let player of ranking$ | async">
+            <td>{{ player.name }}</td>
+            <td>{{player.ranking?.score}}</td>
+            <td>{{winRate(player.ranking?.matchesWon!, player.ranking?.matchesLost!)}}</td>
+        </tr>
+    </tbody>
+</table>
