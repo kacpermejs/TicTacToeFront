@@ -38,6 +38,9 @@ export class RankingComponent implements OnInit {
     if (won == 0) {
       return 0;
     }
+    if (lost == 0) {
+      return won;
+    }
     return won / lost;
   }
 
