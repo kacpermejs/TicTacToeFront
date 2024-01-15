@@ -4,6 +4,8 @@
         <tr>
             <th>Nickname</th>
             <th>Score</th>
+            <th>Matches won</th>
+            <th>Matches lost</th>
             <th>Win Rate</th>
         </tr>
     </thead>
@@ -11,6 +13,8 @@
         <tr *ngFor="let player of ranking$ | async">
             <td>{{ player.name }}</td>
             <td>{{player.ranking?.score}}</td>
+            <td>{{player.ranking?.matchesWon}}</td>
+            <td>{{player.ranking?.matchesLost}}</td>
             <td>{{winRate(player.ranking?.matchesWon!, player.ranking?.matchesLost!)}}</td>
         </tr>
     </tbody>
