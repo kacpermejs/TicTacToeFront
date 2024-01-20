@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://35.171.139.155:8080', //process.env['API_HOST'],
+    apiUrl: 'http://tictactoe-env.eba-mn2mtuqg.us-east-1.elasticbeanstalk.com:8080', //process.env['API_HOST'],
     apiWebsocket: 'http://35.171.139.155:8080/websocket', //process.env['HOST_WEBSOCKET'] + '/websocket',
 
     cognito: {
